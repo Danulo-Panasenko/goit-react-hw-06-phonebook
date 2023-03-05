@@ -1,50 +1,46 @@
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import css from 'components/ContactForm/ContactForm.module.css';
 import { nanoid } from 'nanoid';
-
+import { addContact, deleteContact } from 'Redux/actions';
 import ContactList from 'components/Contact/Contact';
 import Filter from 'components/Filter/Filter';
 import Form from 'components/Form/Form';
 
 const ContactForm = () => {
-  const [contacts, setContacts] = useState(() => {
-    const contacts = JSON.parse(localStorage.getItem('contacts'));
-    return contacts ? contacts : [];
-  });
+  const contacts = useSelector(store => store.contacts);
+  // const [contacts, setContacts] = useState(() => {
+  //   const contacts = JSON.parse(localStorage.getItem('contacts'));
+  //   return contacts ? contacts : [];
+  // });
+
   const [filter, setFilter] = useState('');
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
-  const isDublicate = name => {
-    const normalizedName = name.toLowerCase();
-    const result = contacts.find(({ name }) => {
+  const dispatch = useDispatch();
+
+  const isDublicate = contName => {
+    const normalizedName = contName.toLowerCase();
+    const result = filteredContacts.find(({ name }) => {
       return name.toLowerCase() === normalizedName;
     });
     return Boolean(result);
   };
 
-  const addContact = ({ name, number }) => {
+  const handleAddContact = ({ name, number }) => {
     if (isDublicate(name)) {
       alert(`${name} is already in contacts`);
       return false;
     }
-
-    setContacts(prevContacts => {
-      const newContact = {
-        id: nanoid(),
-        name,
-        number,
-      };
-      return [newContact, ...prevContacts];
-    });
-    return true;
+    const action = addContact({ name, number });
+    dispatch(action);
   };
 
-  const removeContact = id => {
-    setContacts(prevContacts =>
-      prevContacts.filter(contact => contact.id !== id)
-    );
+  const handleDeleteContact = id => {
+    const action = deleteContact(id);
+    dispatch(action);
   };
   const handleChange = ({ target }) => setFilter(target.value);
   const getFilteredContacts = () => {
@@ -64,13 +60,13 @@ const ContactForm = () => {
       <h4>Phonebook</h4>
       <div className={css.wrapper}>
         <div className={css.block}>
-          <Form onSubmit={addContact} />
+          <Form onSubmit={handleAddContact} />
         </div>
         <div>
           <h4>Contacts</h4>
           <Filter value={filter} handleChange={handleChange} />
           <ContactList
-            removeContact={removeContact}
+            deleteContact={handleDeleteContact}
             contacts={filteredContacts}
           />
         </div>
