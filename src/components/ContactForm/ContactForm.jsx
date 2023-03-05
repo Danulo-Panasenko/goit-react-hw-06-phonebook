@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import css from 'components/ContactForm/ContactForm.module.css';
 import { getFilteredContacts, getFilter } from 'Redux/selectors';
