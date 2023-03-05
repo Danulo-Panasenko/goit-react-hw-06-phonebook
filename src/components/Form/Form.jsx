@@ -7,12 +7,18 @@ import PropTypes from 'prop-types';
 const Form = ({ onSubmit }) => {
   const [state, setState] = useState({ ...inititalState });
 
+  // const handleSubmit = e => {
+  //   e.preventDefault();
+  //   onSubmit(state);
+  //   setState({ ...inititalState });
+  // };
   const handleSubmit = e => {
     e.preventDefault();
-    onSubmit({ state });
-    setState({ ...inititalState });
+    const result = onSubmit({ name, number });
+    if (result) {
+      setState({ ...inititalState });
+    }
   };
-
   const handleChange = ({ target }) => {
     const { name, value } = target;
     setState(prevState => {
