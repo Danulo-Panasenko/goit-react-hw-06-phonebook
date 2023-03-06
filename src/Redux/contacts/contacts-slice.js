@@ -1,5 +1,5 @@
-import { customAlphabet } from 'nanoid';
 import { createSlice } from '@reduxjs/toolkit';
+import { customAlphabet } from 'nanoid';
 
 const nanoid = customAlphabet('1234567890', 2);
 
