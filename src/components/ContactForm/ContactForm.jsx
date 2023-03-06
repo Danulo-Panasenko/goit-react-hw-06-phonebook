@@ -1,7 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux';
 import css from 'components/ContactForm/ContactForm.module.css';
-import { getFilteredContacts, getFilter } from 'Redux/selectors';
-import { addContact, deleteContact, setFilter } from 'Redux/actions';
+
+import { getFilteredContacts } from 'Redux/contacts/contacts-selectors';
+import { getFilter } from 'Redux/filter/filter-selectors';
+import { addContact, deleteContact } from 'Redux/contacts/contacts-slice';
+import { setFilter } from 'Redux/filter/filter-slice';
 import ContactList from 'components/Contact/Contact';
 import Filter from 'components/Filter/Filter';
 import Form from 'components/Form/Form';
@@ -9,10 +12,6 @@ import Form from 'components/Form/Form';
 const ContactForm = () => {
   const filteredContacts = useSelector(getFilteredContacts);
   const filter = useSelector(getFilter);
-
-  // useEffect(() => {
-  //   localStorage.setItem('contacts', JSON.stringify(contacts));
-  // }, [contacts]);
 
   const dispatch = useDispatch();
 
@@ -31,6 +30,7 @@ const ContactForm = () => {
     }
     const action = addContact({ name, number });
     dispatch(action);
+    return true;
   };
 
   const handleDeleteContact = id => {
@@ -41,7 +41,7 @@ const ContactForm = () => {
     dispatch(setFilter(target.value));
   };
 
-  // const filteredContacts = getFilteredContacts();
+  //  const filteredContacts = getFilteredContacts();
 
   return (
     <div className={css.style}>
@@ -55,7 +55,7 @@ const ContactForm = () => {
           <Filter value={filter} handleChange={changeFilter} />
           <ContactList
             deleteContact={handleDeleteContact}
-            contacts={filteredContacts}
+            filteredContacts={filteredContacts}
           />
         </div>
       </div>

@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from 'components/Button/Button';
-const ContactList = ({ removeContact, filteredContacts }) => {
+const ContactList = ({ deleteContact, filteredContacts }) => {
   const Contact = filteredContacts.map(({ id, name, number }) => (
     <li key={id}>
       {name}:{number}
-      <Button onClick={() => removeContact(id)} type="button">
+      <Button onClick={() => deleteContact(id)} type="button">
         Delete
       </Button>
     </li>
